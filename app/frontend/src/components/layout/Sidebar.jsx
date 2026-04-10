@@ -1,16 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Zap, History, Settings, ChevronRight,
-  Cloud, Plus, LogOut, Bell
+  Cloud, Plus, LogOut
 } from 'lucide-react';
 import { useAnalysis } from '../../context/AnalysisContext';
-
-const navItems = [
-  { to: '/analyze', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/analyze', icon: Zap, label: 'New Analysis', isAction: true },
-  { to: '/history', icon: History, label: 'Session History' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
-];
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -33,7 +26,7 @@ export default function Sidebar() {
           <span className="font-display font-bold text-white text-base leading-none">
             CloudSage
           </span>
-          <span className="text-xs text-slate-400 block mt-0.5">AI Platform</span>
+          <span className="text-xs text-[#7e857e] block mt-0.5">AI Platform</span>
         </div>
       </div>
 
@@ -43,7 +36,7 @@ export default function Sidebar() {
           onClick={() => navigate('/analyze')}
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-white text-sm font-semibold transition-all"
           style={{ background: 'var(--accent-primary)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = '#3b5bdb'; }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--accent-primary-hover)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--accent-primary)'; }}
           id="sidebar-new-analysis-btn"
         >
@@ -54,8 +47,8 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-4 pt-4 space-y-1">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-2">
-          Menu
+        <p className="text-[11px] font-semibold text-[#4aab6f] uppercase tracking-[0.18em] px-3 mb-2">
+          / Menu
         </p>
         <NavLink
           to="/analyze"
@@ -80,7 +73,7 @@ export default function Sidebar() {
           {sessions.length > 0 && (
             <span
               className="ml-auto text-xs font-medium px-1.5 py-0.5 rounded-full"
-              style={{ background: 'rgba(79,110,247,0.2)', color: '#818cf8' }}
+              style={{ background: 'rgba(58,140,92,0.2)', color: '#8fd0a8' }}
             >
               {sessions.length}
             </span>
@@ -101,8 +94,8 @@ export default function Sidebar() {
         {/* Recent Sessions */}
         {sessions.length > 0 && (
           <div className="pt-4">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-2">
-              Recent
+            <p className="text-[11px] font-semibold text-[#4aab6f] uppercase tracking-[0.18em] px-3 mb-2">
+              / Recent
             </p>
             {sessions.slice(0, 3).map((session) => (
               <NavLink
@@ -117,7 +110,7 @@ export default function Sidebar() {
             ))}
             <NavLink
               to="/history"
-              className="sidebar-nav-item text-xs text-indigo-400"
+              className="sidebar-nav-item text-xs text-[#8fd0a8]"
             >
               <ChevronRight size={14} />
               <span>View all sessions</span>
@@ -137,9 +130,9 @@ export default function Sidebar() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-white truncate">Solutions Architect</p>
-            <p className="text-xs text-slate-400 truncate">Pro Plan</p>
+            <p className="text-xs text-[#7e857e] truncate">Pro Plan</p>
           </div>
-          <LogOut size={15} className="text-slate-500 hover:text-slate-300 transition-colors" />
+          <LogOut size={15} className="text-[#7e857e] hover:text-[#d7dbd7] transition-colors" />
         </div>
       </div>
     </aside>

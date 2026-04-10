@@ -49,7 +49,7 @@ export default function RecommendationsTable({ recommendations = [] }) {
   }, [recommendations, sortKey, sortDir, filterPriority, filterEffort]);
 
   const SortIcon = ({ col }) => {
-    if (sortKey !== col) return <ChevronsUpDown size={13} className="text-slate-400" />;
+    if (sortKey !== col) return <ChevronsUpDown size={13} className="text-[#7e857e]" />;
     return sortDir === 'asc'
       ? <ChevronUp size={13} style={{ color: 'var(--accent-primary)' }} />
       : <ChevronDown size={13} style={{ color: 'var(--accent-primary)' }} />;
@@ -76,7 +76,7 @@ export default function RecommendationsTable({ recommendations = [] }) {
 
           {/* Filters */}
           <div className="flex items-center gap-2 flex-wrap">
-            <Filter size={14} className="text-slate-400" />
+            <Filter size={14} className="text-[#7e857e]" />
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
@@ -107,7 +107,7 @@ export default function RecommendationsTable({ recommendations = [] }) {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border-color)' }}>
+            <tr style={{ background: '#151715', borderBottom: '1px solid var(--border-color)' }}>
               {[
                 { key: 'priority', label: 'Priority' },
                 { key: null, label: 'Resource' },
@@ -118,7 +118,7 @@ export default function RecommendationsTable({ recommendations = [] }) {
               ].map(({ key, label }, i) => (
                 <th
                   key={i}
-                  className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
+                  className="px-4 py-3 text-left text-xs font-semibold text-[#8f968f] uppercase tracking-wider"
                   onClick={key ? () => handleSort(key) : undefined}
                   style={{ cursor: key ? 'pointer' : 'default', whiteSpace: 'nowrap' }}
                 >
@@ -133,7 +133,7 @@ export default function RecommendationsTable({ recommendations = [] }) {
           <tbody>
             {sorted.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-sm text-slate-400">
+                <td colSpan={6} className="px-4 py-8 text-center text-sm text-[#7e857e]">
                   No recommendations match your filters.
                 </td>
               </tr>
@@ -145,13 +145,13 @@ export default function RecommendationsTable({ recommendations = [] }) {
                     className="border-b cursor-pointer transition-colors"
                     style={{
                       borderColor: 'var(--border-color)',
-                      background: expandedId === rec.id ? '#f8fafc' : 'white',
+                      background: expandedId === rec.id ? '#151715' : 'transparent',
                     }}
                     onMouseEnter={(e) => {
-                      if (expandedId !== rec.id) e.currentTarget.style.background = '#fafbfc';
+                      if (expandedId !== rec.id) e.currentTarget.style.background = '#141614';
                     }}
                     onMouseLeave={(e) => {
-                      if (expandedId !== rec.id) e.currentTarget.style.background = 'white';
+                      if (expandedId !== rec.id) e.currentTarget.style.background = 'transparent';
                     }}
                   >
                     <td className="px-4 py-3.5">
@@ -189,15 +189,15 @@ export default function RecommendationsTable({ recommendations = [] }) {
                   </tr>
 
                   {expandedId === rec.id && (
-                    <tr style={{ background: '#f8fafc' }}>
+                    <tr style={{ background: '#151715' }}>
                       <td colSpan={6} className="px-6 py-4">
                         <div
                           className="rounded-xl p-4"
-                          style={{ background: 'white', border: '1px solid var(--border-color)' }}
+                          style={{ background: '#1a1c1a', border: '1px solid var(--border-color)' }}
                         >
                           <div className="grid md:grid-cols-2 gap-4">
                             <div>
-                              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                              <h4 className="text-xs font-bold uppercase tracking-wider text-[#7e857e] mb-1.5">
                                 Issue Detected
                               </h4>
                               <p className="text-sm" style={{ color: 'var(--text-primary)' }}>
@@ -205,7 +205,7 @@ export default function RecommendationsTable({ recommendations = [] }) {
                               </p>
                             </div>
                             <div>
-                              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                              <h4 className="text-xs font-bold uppercase tracking-wider text-[#7e857e] mb-1.5">
                                 AI Recommendation
                               </h4>
                               <p className="text-sm" style={{ color: 'var(--text-primary)' }}>
@@ -218,14 +218,14 @@ export default function RecommendationsTable({ recommendations = [] }) {
                             style={{ borderColor: 'var(--border-color)' }}
                           >
                             <div className="flex items-center gap-1.5">
-                              <span className="text-xs text-slate-400">Est. savings:</span>
+                              <span className="text-xs text-[#7e857e]">Est. savings:</span>
                               <span
                                 className="text-sm font-bold font-mono-numbers"
                                 style={{ color: 'var(--accent-success)' }}
                               >
                                 {formatCurrency(rec.estimated_savings_usd)}/mo
                               </span>
-                              <span className="text-xs text-slate-400">
+                              <span className="text-xs text-[#7e857e]">
                                 ({formatCurrency(rec.estimated_savings_usd * 12)}/yr)
                               </span>
                             </div>

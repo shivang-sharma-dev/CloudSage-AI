@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Clock, TrendingDown, Trash2, ChevronRight, Plus, Filter } from 'lucide-react';
+import { Search, Clock, Trash2, ChevronRight, Plus, Filter } from 'lucide-react';
 import Layout from '../components/layout/Layout';
 import { ScoreBadge } from '../components/shared/Badge';
 import { useAnalysis } from '../context/AnalysisContext';
@@ -46,7 +46,7 @@ export default function History() {
         {/* Stats banner */}
         <div
           className="grid grid-cols-3 gap-4 mb-8 p-5 rounded-2xl"
-          style={{ background: 'linear-gradient(135deg, #4f6ef7, #818cf8)', color: 'white' }}
+          style={{ background: '#1a1c1a', color: 'white', border: '1px solid var(--border-color)' }}
           id="history-stats-banner"
         >
           {[
@@ -58,7 +58,7 @@ export default function History() {
               <p className="text-2xl font-bold font-mono-numbers">
                 {stat.value}{stat.suffix}
               </p>
-              <p className="text-indigo-200 text-xs mt-1">{stat.label}</p>
+              <p className="text-[#8f968f] text-xs mt-1">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -66,7 +66,7 @@ export default function History() {
         {/* Toolbar */}
         <div className="flex items-center gap-3 mb-5 flex-wrap">
           <div className="relative flex-1 min-w-48">
-            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7e857e]" />
             <input
               type="text"
               placeholder="Search sessions..."
@@ -77,7 +77,7 @@ export default function History() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <Filter size={14} className="text-slate-400" />
+            <Filter size={14} className="text-[#7e857e]" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -102,7 +102,7 @@ export default function History() {
         {/* Sessions list */}
         {filtered.length === 0 ? (
           <div className="card p-12 text-center">
-            <Clock size={36} className="mx-auto mb-3 text-slate-300" />
+            <Clock size={36} className="mx-auto mb-3 text-[#7e857e]" />
             <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
               {search ? 'No sessions match your search' : 'No analyses yet'}
             </p>
@@ -151,18 +151,18 @@ export default function History() {
                             >
                               Yes
                             </button>
-                            <button
-                              onClick={() => setConfirmDelete(null)}
-                              className="px-2.5 py-1 rounded text-xs font-semibold"
-                              style={{ background: '#f1f5f9', color: 'var(--text-secondary)' }}
-                            >
-                              No
-                            </button>
+                              <button
+                                onClick={() => setConfirmDelete(null)}
+                                className="px-2.5 py-1 rounded text-xs font-semibold"
+                                style={{ background: '#1a1c1a', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
+                              >
+                                No
+                              </button>
                           </div>
                         ) : (
                           <button
                             onClick={() => setConfirmDelete(session.id)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-50 transition-colors"
+                            className="p-1.5 rounded-lg text-[#7e857e] hover:text-red-400 hover:bg-red-500/10 transition-colors"
                             id={`delete-session-${session.id}`}
                           >
                             <Trash2 size={14} />
@@ -172,9 +172,9 @@ export default function History() {
                           to={`/session/${session.id}`}
                           className="flex items-center gap-1 text-sm font-semibold px-3 py-1.5 rounded-lg transition-colors"
                           style={{
-                            background: 'rgba(79,110,247,0.06)',
+                            background: 'rgba(58,140,92,0.08)',
                             color: 'var(--accent-primary)',
-                            border: '1px solid rgba(79,110,247,0.15)',
+                            border: '1px solid rgba(58,140,92,0.2)',
                           }}
                           id={`view-session-${session.id}`}
                         >
@@ -208,12 +208,12 @@ export default function History() {
                       {/* Savings bar */}
                       <div className="flex-1 hidden md:block">
                         <div className="flex items-center gap-2">
-                          <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: '#f1f5f9' }}>
+                          <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: '#252925' }}>
                             <div
                               className="h-full rounded-full transition-all duration-700"
                               style={{
                                 width: `${session.savings_percentage || 0}%`,
-                                background: 'linear-gradient(90deg, #4f6ef7, #10b981)',
+                                background: 'var(--accent-primary)',
                               }}
                             />
                           </div>

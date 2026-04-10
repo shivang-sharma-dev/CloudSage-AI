@@ -3,11 +3,11 @@ import { Plus, Trash2, Server, Database, HardDrive, Box, Globe, Activity } from 
 
 const RESOURCE_TYPES = [
   { value: 'ec2', label: 'EC2 Instance', icon: Server, color: '#f59e0b' },
-  { value: 'rds', label: 'RDS Database', icon: Database, color: '#4f6ef7' },
+  { value: 'rds', label: 'RDS Database', icon: Database, color: '#3a8c5c' },
   { value: 's3', label: 'S3 Bucket', icon: HardDrive, color: '#10b981' },
-  { value: 'ecs', label: 'ECS/EKS Cluster', icon: Box, color: '#8b5cf6' },
-  { value: 'nat', label: 'NAT Gateway', icon: Globe, color: '#ef4444' },
-  { value: 'alb', label: 'Load Balancer', icon: Activity, color: '#06b6d4' },
+  { value: 'ecs', label: 'ECS/EKS Cluster', icon: Box, color: '#6f8a75' },
+  { value: 'nat', label: 'NAT Gateway', icon: Globe, color: '#c45858' },
+  { value: 'alb', label: 'Load Balancer', icon: Activity, color: '#4aab6f' },
 ];
 
 const EC2_INSTANCE_TYPES = [
@@ -73,7 +73,7 @@ function RDSFields({ resource, onChange }) {
         <input type="number" className="form-input" min="20" value={resource.storage_gb || 100} onChange={e => onChange('storage_gb', e.target.value)} placeholder="100" />
       </div>
       <div className="flex items-center gap-2 pt-5">
-        <input type="checkbox" id="multi-az" className="w-4 h-4 accent-indigo-500" checked={resource.multi_az || false} onChange={e => onChange('multi_az', e.target.checked)} />
+        <input type="checkbox" id="multi-az" className="w-4 h-4 accent-green-600" checked={resource.multi_az || false} onChange={e => onChange('multi_az', e.target.checked)} />
         <label htmlFor="multi-az" className="form-label mb-0">Multi-AZ</label>
       </div>
       <div>
@@ -262,7 +262,7 @@ export default function ResourceInputForm({ onSubmit, isLoading }) {
                 <button
                   type="button"
                   onClick={() => removeResource(resource.id)}
-                  className="text-slate-400 hover:text-red-400 transition-colors"
+                  className="text-[#7e857e] hover:text-red-400 transition-colors"
                   disabled={resources.length === 1}
                 >
                   <Trash2 size={15} />
@@ -282,7 +282,7 @@ export default function ResourceInputForm({ onSubmit, isLoading }) {
 
       {/* Add resource */}
       <div>
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+        <p className="text-[11px] font-semibold text-[#4aab6f] uppercase tracking-[0.18em] mb-2">
           Add Resource
         </p>
         <div className="flex flex-wrap gap-2">

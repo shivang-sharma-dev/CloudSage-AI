@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getScoreColor, getScoreLabel } from '../../utils/formatters';
 
 function GaugeCircle({ score, label, commentary, color, size = 120 }) {
@@ -34,7 +34,7 @@ function GaugeCircle({ score, label, commentary, color, size = 120 }) {
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="#f1f5f9"
+            stroke="#272b27"
             strokeWidth={8}
           />
           <circle

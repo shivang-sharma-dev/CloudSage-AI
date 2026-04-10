@@ -6,7 +6,7 @@ export default function Settings() {
   const [apiKey, setApiKey] = useState('');
   const [showKey, setShowKey] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
   const [notifications, setNotifications] = useState(true);
 
   useEffect(() => {
@@ -83,11 +83,11 @@ export default function Settings() {
                     className="form-input pr-10 font-mono text-sm"
                     id="api-key-input"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowKey((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                  >
+                    <button
+                      type="button"
+                      onClick={() => setShowKey((v) => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7e857e] hover:text-[#d7dbd7] transition-colors"
+                    >
                     {showKey ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
                 </div>
@@ -116,7 +116,7 @@ export default function Settings() {
 
             <div
               className="p-3 rounded-xl text-sm"
-              style={{ background: 'rgba(79,110,247,0.06)', border: '1px solid rgba(79,110,247,0.15)' }}
+              style={{ background: 'rgba(58,140,92,0.08)', border: '1px solid rgba(58,140,92,0.2)' }}
             >
               <p className="font-semibold mb-1" style={{ color: 'var(--accent-primary)' }}>
                 Backend Status
@@ -145,7 +145,7 @@ export default function Settings() {
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                {theme === 'light' ? <Sun size={16} className="text-slate-500" /> : <Moon size={16} className="text-slate-500" />}
+                {theme === 'light' ? <Sun size={16} className="text-[#7e857e]" /> : <Moon size={16} className="text-[#7e857e]" />}
                 <div>
                   <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                     Theme
@@ -162,7 +162,7 @@ export default function Settings() {
                     onClick={() => setTheme(t)}
                     className="px-4 py-1.5 text-sm font-medium capitalize transition-colors"
                     style={{
-                      background: theme === t ? 'var(--accent-primary)' : 'white',
+                      background: theme === t ? 'var(--accent-primary)' : '#151715',
                       color: theme === t ? 'white' : 'var(--text-secondary)',
                     }}
                     id={`theme-${t}-btn`}
@@ -175,7 +175,7 @@ export default function Settings() {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Bell size={16} className="text-slate-500" />
+                <Bell size={16} className="text-[#7e857e]" />
                 <div>
                   <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                     Analysis Notifications
@@ -207,10 +207,10 @@ export default function Settings() {
                 a.click();
               }}
               className="w-full flex items-center gap-3 p-4 rounded-xl border transition-all hover:shadow-card"
-              style={{ border: '1px solid var(--border-color)', background: 'white' }}
+              style={{ border: '1px solid var(--border-color)', background: '#1a1c1a' }}
               id="export-data-btn"
             >
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: '#f0f4ff' }}>
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: '#151715', border: '1px solid var(--border-color)' }}>
                 <Download size={16} style={{ color: 'var(--accent-primary)' }} />
               </div>
               <div className="text-left">
@@ -226,7 +226,7 @@ export default function Settings() {
             {/* Danger zone */}
             <div
               className="p-4 rounded-xl"
-              style={{ border: '1px solid #fecaca', background: '#fef2f2' }}
+              style={{ border: '1px solid rgba(196,88,88,0.4)', background: 'rgba(196,88,88,0.12)' }}
             >
               <p className="text-sm font-bold mb-2" style={{ color: '#dc2626' }}>
                 Danger Zone
@@ -234,9 +234,9 @@ export default function Settings() {
               <button
                 onClick={handleClearData}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-colors"
-                style={{ background: '#ef4444' }}
-                onMouseEnter={(e) => e.currentTarget.style.background = '#dc2626'}
-                onMouseLeave={(e) => e.currentTarget.style.background = '#ef4444'}
+                style={{ background: '#a54545' }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#8d3a3a'}
+                onMouseLeave={(e) => e.currentTarget.style.background = '#a54545'}
                 id="clear-data-btn"
               >
                 <Trash2 size={14} />
