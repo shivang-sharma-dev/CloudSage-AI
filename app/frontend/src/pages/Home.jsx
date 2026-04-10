@@ -8,6 +8,7 @@ import {
   Shield,
   Sparkles,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const sectionLabelClass =
   "text-[11px] uppercase tracking-[0.22em] text-[#4aab6f] font-medium";
@@ -107,6 +108,13 @@ const pricing = [
 ];
 
 export default function Home() {
+  const navLinks = [
+    { label: "Product", href: "#product-demo" },
+    { label: "Integrations", href: "#how-it-works" },
+    { label: "Pricing", href: "#pricing" },
+    { label: "Docs", to: "/settings" },
+  ];
+
   return (
     <>
       <style>{`
@@ -116,31 +124,37 @@ export default function Home() {
       <div className="min-h-screen bg-[#111211] text-[#f3f4f3]">
         <header className="sticky top-0 z-50 border-b border-white/10 bg-[#111211]/95 backdrop-blur">
           <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 lg:px-10">
-            <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 bg-[#1a1c1a]">
                 <Sparkles className="h-4 w-4 text-[#4aab6f]" />
               </div>
               <span className="text-sm font-semibold tracking-wide">CloudSage AI</span>
-            </div>
+            </Link>
 
             <ul className="hidden items-center gap-10 text-sm text-[#c5c8c5] md:flex">
-              {["Product", "Integrations", "Pricing", "Docs"].map((item) => (
-                <li key={item}>
-                  <a className="border-b border-transparent pb-1 transition hover:border-[#4aab6f] hover:text-[#f3f4f3]" href="#">
-                    {item}
-                  </a>
+              {navLinks.map((item) => (
+                <li key={item.label}>
+                  {item.to ? (
+                    <Link className="border-b border-transparent pb-1 transition hover:border-[#4aab6f] hover:text-[#f3f4f3]" to={item.to}>
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <a className="border-b border-transparent pb-1 transition hover:border-[#4aab6f] hover:text-[#f3f4f3]" href={item.href}>
+                      {item.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
 
-            <button className="rounded-md border border-[#3a8c5c] px-4 py-2 text-sm font-medium text-[#4aab6f] transition hover:scale-[1.02] hover:bg-[#3a8c5c]/10">
+            <Link to="/analyze" className="rounded-md border border-[#3a8c5c] px-4 py-2 text-sm font-medium text-[#4aab6f] transition hover:scale-[1.02] hover:bg-[#3a8c5c]/10">
               Request access
-            </button>
+            </Link>
           </nav>
         </header>
 
         <main>
-          <section className="mx-auto grid w-full max-w-7xl gap-14 px-6 pb-24 pt-20 lg:grid-cols-12 lg:px-10">
+          <section id="hero" className="mx-auto grid w-full max-w-7xl gap-14 px-6 pb-24 pt-20 lg:grid-cols-12 lg:px-10">
             <div className="lg:col-span-7">
               <p className={sectionLabelClass}>/ AWS COST INTELLIGENCE</p>
               <h1
@@ -156,13 +170,13 @@ export default function Home() {
                 measurable savings, low-risk changes, and clear implementation pathways.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
-                <button className="inline-flex items-center gap-2 rounded-md bg-[#3a8c5c] px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] hover:bg-[#347e52]">
+                <Link to="/analyze" className="inline-flex items-center gap-2 rounded-md bg-[#3a8c5c] px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] hover:bg-[#347e52]">
                   Start analysis
                   <ArrowRight className="h-4 w-4" />
-                </button>
-                <button className="rounded-md border border-[#3a8c5c] px-6 py-3 text-sm font-semibold text-[#4aab6f] transition hover:scale-[1.02] hover:bg-[#3a8c5c]/10">
+                </Link>
+                <a href="#product-demo" className="rounded-md border border-[#3a8c5c] px-6 py-3 text-sm font-semibold text-[#4aab6f] transition hover:scale-[1.02] hover:bg-[#3a8c5c]/10">
                   View demo
-                </button>
+                </a>
               </div>
             </div>
 
@@ -222,7 +236,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="mx-auto w-full max-w-7xl px-6 pb-24 lg:px-10">
+          <section id="product-demo" className="mx-auto w-full max-w-7xl px-6 pb-24 lg:px-10">
             <div className={`${cardClass} grid gap-0 overflow-hidden lg:grid-cols-5`}>
               <div className="border-b border-white/10 p-8 lg:col-span-2 lg:border-b-0 lg:border-r">
                 <p className={sectionLabelClass}>/ PRODUCT DEMO</p>
@@ -253,7 +267,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="mx-auto w-full max-w-7xl px-6 pb-24 lg:px-10">
+          <section id="how-it-works" className="mx-auto w-full max-w-7xl px-6 pb-24 lg:px-10">
             <p className={sectionLabelClass}>/ HOW IT WORKS</p>
             <h2 className="mt-4 text-4xl text-[#f3f4f3]" style={{ fontFamily: "'IBM Plex Serif', serif" }}>
               Structured, risk-aware optimization workflow
@@ -287,7 +301,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="mx-auto w-full max-w-7xl px-6 pb-24 lg:px-10">
+          <section id="pricing" className="mx-auto w-full max-w-7xl px-6 pb-24 lg:px-10">
             <p className={sectionLabelClass}>/ TESTIMONIALS</p>
             <h2 className="mt-4 text-4xl text-[#f3f4f3]" style={{ fontFamily: "'IBM Plex Serif', serif" }}>
               Trusted by engineering leaders
@@ -328,7 +342,8 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                  <button
+                  <Link
+                    to="/analyze"
                     className={`mt-8 w-full rounded-md px-4 py-2.5 text-sm font-semibold transition hover:scale-[1.02] ${
                       plan.featured
                         ? "bg-[#3a8c5c] text-white hover:bg-[#347e52]"
@@ -336,7 +351,7 @@ export default function Home() {
                     }`}
                   >
                     Choose {plan.name}
-                  </button>
+                  </Link>
                 </article>
               ))}
             </div>
@@ -352,12 +367,12 @@ export default function Home() {
                 Start with one AWS account, validate quick wins, then scale governance across every team.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-4">
-                <button className="rounded-md bg-[#3a8c5c] px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] hover:bg-[#347e52]">
+                <Link to="/analyze" className="rounded-md bg-[#3a8c5c] px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] hover:bg-[#347e52]">
                   Book a walkthrough
-                </button>
-                <button className="rounded-md border border-[#3a8c5c] px-6 py-3 text-sm font-semibold text-[#4aab6f] transition hover:scale-[1.02] hover:bg-[#3a8c5c]/10">
+                </Link>
+                <Link to="/settings" className="rounded-md border border-[#3a8c5c] px-6 py-3 text-sm font-semibold text-[#4aab6f] transition hover:scale-[1.02] hover:bg-[#3a8c5c]/10">
                   Read documentation
-                </button>
+                </Link>
               </div>
             </div>
           </section>
@@ -367,11 +382,10 @@ export default function Home() {
           <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-10 text-sm text-[#8f968f] md:flex-row md:items-center md:justify-between lg:px-10">
             <p>© {new Date().getFullYear()} CloudSage AI. Built for resilient cloud engineering.</p>
             <div className="flex items-center gap-6">
-              {["Security", "Privacy", "Terms", "Status"].map((link) => (
-                <a key={link} className="transition hover:text-[#d6dbd6]" href="#">
-                  {link}
-                </a>
-              ))}
+              <a className="transition hover:text-[#d6dbd6]" href="#hero">Security</a>
+              <a className="transition hover:text-[#d6dbd6]" href="#hero">Privacy</a>
+              <a className="transition hover:text-[#d6dbd6]" href="#hero">Terms</a>
+              <Link className="transition hover:text-[#d6dbd6]" to="/history">Status</Link>
             </div>
           </div>
         </footer>

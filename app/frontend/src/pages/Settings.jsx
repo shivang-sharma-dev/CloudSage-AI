@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Key, Eye, EyeOff, Save, Trash2, Download, Moon, Sun, Bell } from 'lucide-react';
 import Layout from '../components/layout/Layout';
+import { api } from '../api/client';
 
 export default function Settings() {
   const [apiKey, setApiKey] = useState('');
@@ -8,11 +9,15 @@ export default function Settings() {
   const [saved, setSaved] = useState(false);
   const [theme, setTheme] = useState('dark');
   const [notifications, setNotifications] = useState(true);
+  const [backendHealthy, setBackendHealthy] = useState(null);
 
   useEffect(() => {
     document.title = 'Settings — CloudSage AI';
     const savedKey = localStorage.getItem('cloudsage_api_key') || '';
     setApiKey(savedKey);
+    api.health()
+      .then(() => setBackendHealthy(true))
+      .catch(() => setBackendHealthy(false));
   }, []);
 
   const handleSaveApiKey = () => {
@@ -124,13 +129,14 @@ export default function Settings() {
               <div className="flex items-center gap-2">
                 <div
                   className="w-2 h-2 rounded-full"
-                  style={{ background: '#f59e0b' }}
+                  style={{ background: backendHealthy ? '#4aab6f' : '#c45858' }}
                 />
                 <span style={{ color: 'var(--text-secondary)' }}>
-                  Backend not connected (demo mode active) — connect to{' '}
-                  <code className="font-mono text-xs" style={{ color: 'var(--text-primary)' }}>
-                    localhost:8000
-                  </code>
+                  {backendHealthy === null
+                    ? 'Checking backend connectivity...'
+                    : backendHealthy
+                    ? 'Backend connected and healthy.'
+                    : 'Backend unavailable. Check API URL / server status.'}
                 </span>
               </div>
             </div>

@@ -17,24 +17,26 @@ import { formatDate } from '../utils/formatters';
 export default function Analyze() {
   const {
     currentAnalysis,
+    sessions,
     isAnalyzing,
     analysisStep,
     error,
     submitAnalysis,
+    loadSessions,
   } = useAnalysis();
 
   const [inputTab, setInputTab] = useState('form');
   const [chatOpen, setChatOpen] = useState(false);
-  const [hasAnalyzed, setHasAnalyzed] = useState(true); // true = show demo data by default
 
   useEffect(() => {
     document.title = 'Analysis Dashboard — CloudSage AI';
-  }, []);
+    if (!currentAnalysis && sessions.length === 0) {
+      loadSessions().catch(() => {});
+    }
+  }, [currentAnalysis, sessions.length, loadSessions]);
 
   const handleSubmit = async (payload) => {
-    setHasAnalyzed(false);
     await submitAnalysis(payload);
-    setHasAnalyzed(true);
   };
 
   return (
@@ -88,19 +90,11 @@ export default function Analyze() {
             )}
           </div>
 
-          {/* Demo note */}
-          <div
-            className="mx-5 mb-5 p-3 rounded-xl text-xs"
-            style={{ background: 'rgba(58,140,92,0.08)', border: '1px solid rgba(58,140,92,0.2)', color: 'var(--accent-primary)' }}
-          >
-            <strong>Demo mode:</strong> Backend not connected. Showing mock analysis results. 
-            Connect to <code className="font-mono text-xs">localhost:8000</code> for live AI analysis.
-          </div>
         </div>
 
         {/* ─── Right Panel: Results ───────────────────────────── */}
         <div className="flex-1 overflow-y-auto">
-          {hasAnalyzed && currentAnalysis ? (
+          {currentAnalysis ? (
             <div className="p-6 space-y-6">
               {/* Results header */}
               <div className="flex items-center justify-between">
@@ -148,7 +142,7 @@ export default function Analyze() {
                       <div
                         key={i}
                         className="flex items-start gap-3 text-sm py-2.5 px-3 rounded-lg"
-                        style={{ background: '#fafbfc', border: '1px solid var(--border-color)' }}
+                        style={{ background: '#151715', border: '1px solid var(--border-color)' }}
                       >
                         <SeverityBadge severity={flag.severity} />
                         <div>
@@ -206,7 +200,7 @@ export default function Analyze() {
       <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />
 
       {/* Floating chat button */}
-      {!chatOpen && hasAnalyzed && (
+      {!chatOpen && currentAnalysis && (
         <button
           onClick={() => setChatOpen(true)}
           className="fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center transition-all hover:scale-105 z-20 border border-white/10"

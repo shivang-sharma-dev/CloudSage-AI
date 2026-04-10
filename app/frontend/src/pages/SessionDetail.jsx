@@ -10,7 +10,6 @@ import RecommendationsTable from '../components/dashboard/RecommendationsTable';
 import ChatPanel from '../components/chat/ChatPanel';
 import { SeverityBadge } from '../components/shared/Badge';
 import { useAnalysis } from '../context/AnalysisContext';
-import { mockAnalysisResult } from '../data/mockData';
 import { formatDateTime } from '../utils/formatters';
 
 export default function SessionDetail() {
@@ -32,13 +31,13 @@ export default function SessionDetail() {
         setCurrentAnalysis(data);
         setChatMessages([]);
       } catch {
-        setSession(mockAnalysisResult);
+        setSession(null);
       } finally {
         setLoading(false);
       }
     };
     fetch();
-  }, [id]);
+  }, [id, loadSession, setCurrentAnalysis, setChatMessages]);
 
   const handleDelete = async () => {
     await deleteSession(id);
