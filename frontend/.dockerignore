@@ -1,0 +1,24 @@
+# Node modules (copied via npm ci in Dockerfile)
+node_modules/
+
+# Vite build output (generated in container)
+dist/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Git
+.git/
+.gitignore
+
+# Test / storybook
+*.test.*
+*.spec.*

@@ -1,0 +1,221 @@
+import { useState, useEffect } from 'react';
+import { MessageSquare, RefreshCw, Download, AlertTriangle } from 'lucide-react';
+import Layout from '../components/layout/Layout';
+import ResourceInputForm from '../components/analysis/ResourceInputForm';
+import JsonConfigInput from '../components/analysis/JsonConfigInput';
+import AnalysisLoader from '../components/analysis/AnalysisLoader';
+import ArchitectureHealthScore from '../components/analysis/ArchitectureHealthScore';
+import SummaryCards from '../components/dashboard/SummaryCards';
+import CostBreakdownChart from '../components/dashboard/CostBreakdownChart';
+import BeforeAfterChart from '../components/dashboard/BeforeAfterChart';
+import RecommendationsTable from '../components/dashboard/RecommendationsTable';
+import ChatPanel from '../components/chat/ChatPanel';
+import { SeverityBadge } from '../components/shared/Badge';
+import { useAnalysis } from '../context/AnalysisContext';
+import { formatDate } from '../utils/formatters';
+
+export default function Analyze() {
+  const {
+    currentAnalysis,
+    isAnalyzing,
+    analysisStep,
+    error,
+    submitAnalysis,
+  } = useAnalysis();
+
+  const [inputTab, setInputTab] = useState('form');
+  const [chatOpen, setChatOpen] = useState(false);
+  const [hasAnalyzed, setHasAnalyzed] = useState(true); // true = show demo data by default
+
+  useEffect(() => {
+    document.title = 'Analysis Dashboard — CloudSage AI';
+  }, []);
+
+  const handleSubmit = async (payload) => {
+    setHasAnalyzed(false);
+    await submitAnalysis(payload);
+    setHasAnalyzed(true);
+  };
+
+  return (
+    <Layout title="Analysis Dashboard" breadcrumb="Analysis">
+      <div className="flex h-full">
+        {/* ─── Left Panel: Input ──────────────────────────────── */}
+        <div
+          className="w-[380px] shrink-0 flex flex-col border-r overflow-y-auto"
+          style={{ borderColor: 'var(--border-color)', background: 'white' }}
+        >
+          <div className="p-5">
+            {/* Input tabs */}
+            <div
+              className="flex rounded-lg p-1 mb-5"
+              style={{ background: '#f1f5f9' }}
+            >
+              {[
+                { id: 'form', label: 'Form Input' },
+                { id: 'json', label: 'JSON / YAML' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setInputTab(tab.id)}
+                  className="flex-1 py-2 text-sm font-semibold rounded-md transition-all"
+                  style={{
+                    background: inputTab === tab.id ? 'white' : 'transparent',
+                    color: inputTab === tab.id ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    boxShadow: inputTab === tab.id ? 'var(--shadow-card)' : 'none',
+                  }}
+                  id={`input-tab-${tab.id}`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {inputTab === 'form' ? (
+              <ResourceInputForm onSubmit={handleSubmit} isLoading={isAnalyzing} />
+            ) : (
+              <JsonConfigInput onSubmit={handleSubmit} isLoading={isAnalyzing} />
+            )}
+
+            {error && (
+              <div
+                className="mt-4 p-3 rounded-xl flex items-start gap-2 text-sm"
+                style={{ background: '#fef2f2', color: '#dc2626' }}
+              >
+                <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+                {error}
+              </div>
+            )}
+          </div>
+
+          {/* Demo note */}
+          <div
+            className="mx-5 mb-5 p-3 rounded-xl text-xs"
+            style={{ background: 'rgba(79,110,247,0.06)', border: '1px solid rgba(79,110,247,0.15)', color: 'var(--accent-primary)' }}
+          >
+            <strong>Demo mode:</strong> Backend not connected. Showing mock analysis results. 
+            Connect to <code className="font-mono text-xs">localhost:8000</code> for live AI analysis.
+          </div>
+        </div>
+
+        {/* ─── Right Panel: Results ───────────────────────────── */}
+        <div className="flex-1 overflow-y-auto">
+          {hasAnalyzed && currentAnalysis ? (
+            <div className="p-6 space-y-6">
+              {/* Results header */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2
+                    className="font-display font-bold text-xl"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
+                    {currentAnalysis.title}
+                  </h2>
+                  <p className="text-sm mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+                    Analyzed on {formatDate(currentAnalysis.created_at)} ·{' '}
+                    {currentAnalysis.recommendations?.length} recommendations
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => window.print()}
+                    className="btn-outline text-xs px-3 py-2 gap-1.5"
+                    id="export-pdf-btn"
+                  >
+                    <Download size={14} />
+                    Export PDF
+                  </button>
+                  <button
+                    onClick={() => setChatOpen(true)}
+                    className="btn-primary text-xs px-3 py-2 gap-1.5"
+                    id="open-chat-btn"
+                  >
+                    <MessageSquare size={14} />
+                    Ask CloudSage
+                  </button>
+                </div>
+              </div>
+
+              {/* Risk flags */}
+              {currentAnalysis.risk_flags && currentAnalysis.risk_flags.length > 0 && (
+                <div className="card p-4" id="risk-flags-card">
+                  <h3 className="font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                    <AlertTriangle size={15} style={{ color: '#f59e0b' }} />
+                    Risk Flags
+                  </h3>
+                  <div className="space-y-2">
+                    {currentAnalysis.risk_flags.map((flag, i) => (
+                      <div
+                        key={i}
+                        className="flex items-start gap-3 text-sm py-2.5 px-3 rounded-lg"
+                        style={{ background: '#fafbfc', border: '1px solid var(--border-color)' }}
+                      >
+                        <SeverityBadge severity={flag.severity} />
+                        <div>
+                          <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                            {flag.resource}
+                          </span>
+                          <span style={{ color: 'var(--text-secondary)' }}> — {flag.message}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Summary cards */}
+              <SummaryCards analysis={currentAnalysis} />
+
+              {/* Charts row */}
+              <div className="grid lg:grid-cols-2 gap-5">
+                <CostBreakdownChart costBreakdown={currentAnalysis.cost_breakdown} />
+                <BeforeAfterChart beforeAfterData={currentAnalysis.before_after} />
+              </div>
+
+              {/* Architecture health */}
+              <ArchitectureHealthScore healthScores={currentAnalysis.health_scores} />
+
+              {/* Recommendations */}
+              <RecommendationsTable recommendations={currentAnalysis.recommendations} />
+            </div>
+          ) : !isAnalyzing ? (
+            <div className="flex flex-col items-center justify-center h-full gap-5 text-center px-10">
+              <div
+                className="w-20 h-20 rounded-2xl flex items-center justify-center"
+                style={{ background: 'rgba(79,110,247,0.08)' }}
+              >
+                <RefreshCw size={32} style={{ color: 'var(--accent-primary)' }} />
+              </div>
+              <div>
+                <p className="font-display font-bold text-xl" style={{ color: 'var(--text-primary)' }}>
+                  Submit your infrastructure config
+                </p>
+                <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
+                  Fill out the form on the left and click "Analyze with AI" to get your cost optimization analysis.
+                </p>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      {/* Analysis loader overlay */}
+      {isAnalyzing && <AnalysisLoader currentStep={analysisStep} />}
+
+      {/* Chat panel */}
+      <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+
+      {/* Floating chat button */}
+      {!chatOpen && hasAnalyzed && (
+        <button
+          onClick={() => setChatOpen(true)}
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 z-20"
+          style={{ background: 'var(--accent-primary)', boxShadow: '0 4px 20px rgba(79,110,247,0.4)' }}
+          id="floating-chat-btn"
+        >
+          <MessageSquare size={22} color="white" />
+        </button>
+      )}
+    </Layout>
+  );
+}

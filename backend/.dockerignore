@@ -1,0 +1,35 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test + coverage
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Alembic compiled
+alembic/__pycache__/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Environment files (never bake secrets into image)
+.env
+.env.*
+!.env.example
+
+# Git
+.git/
+.gitignore
