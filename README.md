@@ -63,55 +63,59 @@ Submit your AWS resource config (EC2, RDS, S3, ECS, NAT Gateway, ALB) and get ba
 
 ## ✨ Features
 
-| Feature | Description |
-|---|---|
-| **AI Cost Analysis** | Submit EC2, RDS, S3, ECS, NAT, ALB configs — Claude/Gemini returns structured JSON analysis |
-| **Cost Dashboard** | Summary cards, donut chart, before/after bar chart, sortable recommendations table |
-| **Architecture Health Score** | 0–100 score across Cost Efficiency, Reliability, Security Posture, Scalability |
-| **Risk Flags** | AI-identified single points of failure, over-provisioning, idle resources |
-| **Chat Follow-up** | Ask follow-up questions with full analysis context in a chat UI |
-| **Session History** | Every analysis saved to PostgreSQL — browse and compare past sessions |
-| **JSON / Form Input** | Input resources via structured form OR paste raw JSON/YAML config |
-| **Multi-AI Provider** | Swap between Claude, Gemini Flash, Groq (Llama 3.1), or local Ollama |
+| Feature                       | Description                                                                                 |
+| ----------------------------- | ------------------------------------------------------------------------------------------- |
+| **AI Cost Analysis**          | Submit EC2, RDS, S3, ECS, NAT, ALB configs — Claude/Gemini returns structured JSON analysis |
+| **Cost Dashboard**            | Summary cards, donut chart, before/after bar chart, sortable recommendations table          |
+| **Architecture Health Score** | 0–100 score across Cost Efficiency, Reliability, Security Posture, Scalability              |
+| **Risk Flags**                | AI-identified single points of failure, over-provisioning, idle resources                   |
+| **Chat Follow-up**            | Ask follow-up questions with full analysis context in a chat UI                             |
+| **Session History**           | Every analysis saved to PostgreSQL — browse and compare past sessions                       |
+| **JSON / Form Input**         | Input resources via structured form OR paste raw JSON/YAML config                           |
+| **Multi-AI Provider**         | Swap between Claude, Gemini Flash, Groq (Llama 3.1), or local Ollama                        |
 
 ---
 
 ## 🔧 Tech Stack
 
 ### Frontend
-| Technology | Purpose |
-|---|---|
-| React 18 + Vite | UI framework + dev server |
-| TailwindCSS | Utility-first styling |
-| Recharts | Cost breakdown + before/after charts |
-| Lucide React | Icon library |
-| Axios | HTTP client → FastAPI |
-| React Router v6 | Client-side routing |
+
+| Technology      | Purpose                              |
+| --------------- | ------------------------------------ |
+| React 18 + Vite | UI framework + dev server            |
+| TailwindCSS     | Utility-first styling                |
+| Recharts        | Cost breakdown + before/after charts |
+| Lucide React    | Icon library                         |
+| Axios           | HTTP client → FastAPI                |
+| React Router v6 | Client-side routing                  |
 
 ### Backend
-| Technology | Purpose |
-|---|---|
-| FastAPI | Async REST API framework |
-| Anthropic SDK | Claude AI integration |
-| SQLAlchemy (async) | ORM with asyncpg driver |
-| Alembic | Database migrations |
-| Pydantic v2 | Request/response validation |
-| uvicorn | ASGI server |
+
+| Technology         | Purpose                     |
+| ------------------ | --------------------------- |
+| FastAPI            | Async REST API framework    |
+| Anthropic SDK      | Claude AI integration       |
+| SQLAlchemy (async) | ORM with asyncpg driver     |
+| Alembic            | Database migrations         |
+| Pydantic v2        | Request/response validation |
+| uvicorn            | ASGI server                 |
 
 ### Infrastructure
-| Technology | Purpose |
-|---|---|
-| PostgreSQL 15 | Primary database |
-| Docker + Compose | Local 3-container dev stack |
-| nginx | Serves React SPA in production |
-| python:3.11-slim | Backend base image |
-| node:18-alpine | Frontend build stage |
+
+| Technology       | Purpose                        |
+| ---------------- | ------------------------------ |
+| PostgreSQL 15    | Primary database               |
+| Docker + Compose | Local 3-container dev stack    |
+| nginx            | Serves React SPA in production |
+| python:3.11-slim | Backend base image             |
+| node:18-alpine   | Frontend build stage           |
 
 ---
 
 ## 🚀 Quick Start (Docker — Recommended)
 
 ### Prerequisites
+
 - Docker Desktop or Docker Engine + Compose plugin
 - An AI API key — **Gemini Flash is free**: [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
 
@@ -148,11 +152,11 @@ docker exec -it cloudsage-ai-backend-1 python3 database/seed.py
 
 ### 5. Open the app
 
-| Service | URL |
-|---|---|
-| 🌐 Frontend | http://localhost:3000 |
-| ⚙️ API | http://localhost:8000 |
-| 📖 API Docs | http://localhost:8000/docs |
+| Service         | URL                          |
+| --------------- | ---------------------------- |
+| 🌐 Frontend     | http://localhost:3000        |
+| ⚙️ API          | http://localhost:8000        |
+| 📖 API Docs     | http://localhost:8000/docs   |
 | ❤️ Health Check | http://localhost:8000/health |
 
 ---
@@ -196,26 +200,26 @@ npm run dev
 
 ### Analysis
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/v1/analyze` | Submit infrastructure config, get AI analysis |
-| `GET` | `/api/v1/analyze/{id}` | Retrieve a completed analysis by session ID |
-| `POST` | `/api/v1/analyze/{id}/chat` | Send a follow-up question on an analysis |
+| Method | Endpoint                    | Description                                   |
+| ------ | --------------------------- | --------------------------------------------- |
+| `POST` | `/api/v1/analyze`           | Submit infrastructure config, get AI analysis |
+| `GET`  | `/api/v1/analyze/{id}`      | Retrieve a completed analysis by session ID   |
+| `POST` | `/api/v1/analyze/{id}/chat` | Send a follow-up question on an analysis      |
 
 ### Sessions
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/v1/sessions` | List all sessions (paginated: `?page=1&size=20`) |
-| `GET` | `/api/v1/sessions/{id}` | Get full session detail |
-| `DELETE` | `/api/v1/sessions/{id}` | Delete a session and all related data |
+| Method   | Endpoint                | Description                                      |
+| -------- | ----------------------- | ------------------------------------------------ |
+| `GET`    | `/api/v1/sessions`      | List all sessions (paginated: `?page=1&size=20`) |
+| `GET`    | `/api/v1/sessions/{id}` | Get full session detail                          |
+| `DELETE` | `/api/v1/sessions/{id}` | Delete a session and all related data            |
 
 ### Health
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/health` | Returns `{"status":"ok","db":"ok","model":"..."}` |
-| `GET` | `/api/v1/info` | App version, model, and endpoint map |
+| Method | Endpoint       | Description                                       |
+| ------ | -------------- | ------------------------------------------------- |
+| `GET`  | `/health`      | Returns `{"status":"ok","db":"ok","model":"..."}` |
+| `GET`  | `/api/v1/info` | App version, model, and endpoint map              |
 
 ### Example Request
 
@@ -255,6 +259,7 @@ recommendations     -- Denormalized recommendations for fast filtering
 ```
 
 **Indexes:**
+
 - `idx_sessions_created_at DESC` — fast history pagination
 - `idx_chat_messages_session_id` — fast chat load per session
 - `idx_recommendations_session_id` — fast rec lookup
@@ -266,12 +271,12 @@ recommendations     -- Denormalized recommendations for fast filtering
 
 CloudSage AI supports multiple AI backends. Set `AI_PROVIDER` in your `.env`:
 
-| Provider | `AI_PROVIDER` value | Cost | Key |
-|---|---|---|---|
-| Google Gemini Flash | `gemini` | ✅ Free | [AI Studio](https://aistudio.google.com/apikey) |
-| Groq (Llama 3.1 70B) | `groq` | ✅ Free tier | [Groq Console](https://console.groq.com) |
-| Anthropic Claude | `claude` | 💳 Paid | [Anthropic](https://console.anthropic.com) |
-| Local Ollama | `ollama` | ✅ Free (local) | `ollama pull llama3.1` |
+| Provider             | `AI_PROVIDER` value | Cost            | Key                                             |
+| -------------------- | ------------------- | --------------- | ----------------------------------------------- |
+| Google Gemini Flash  | `gemini`            | ✅ Free         | [AI Studio](https://aistudio.google.com/apikey) |
+| Groq (Llama 3.1 70B) | `groq`              | ✅ Free tier    | [Groq Console](https://console.groq.com)        |
+| Anthropic Claude     | `claude`            | 💳 Paid         | [Anthropic](https://console.anthropic.com)      |
+| Local Ollama         | `ollama`            | ✅ Free (local) | `ollama pull llama3.1`                          |
 
 ---
 
@@ -345,6 +350,7 @@ pytest tests/ -v
 ## 👤 Author
 
 **Shivang Sharma**
+
 - GitHub: [@shivang-sharma-dev](https://github.com/shivang-sharma-dev)
 
 ---
