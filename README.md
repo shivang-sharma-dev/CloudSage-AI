@@ -147,7 +147,11 @@ docker compose up --build
 ```bash
 # Wait for containers to be healthy, then:
 docker exec -it cloudsage-ai-backend-1 alembic upgrade head
-docker exec -it cloudsage-ai-backend-1 python3 database/seed.py
+
+# Note: With the new DevOps layout, seed.py is outside the backend container.
+# Run it locally (requires Python 3.11+ and dependencies), or copy it in first:
+docker cp app/database/seed.py cloudsage-ai-backend-1:/app/seed.py
+docker exec -it cloudsage-ai-backend-1 python3 seed.py
 ```
 
 ### 5. Open the app
@@ -166,7 +170,7 @@ docker exec -it cloudsage-ai-backend-1 python3 database/seed.py
 ### Backend
 
 ```bash
-cd backend
+cd app/backend
 
 # Install dependencies
 pip install -r requirements.txt -r requirements-dev.txt
@@ -184,7 +188,7 @@ uvicorn app.main:app --reload --port 8000
 ### Frontend
 
 ```bash
-cd frontend
+cd app/frontend
 
 # Install dependencies
 npm install
@@ -287,34 +291,25 @@ cloudsage-ai/
 ├── docker-compose.yml          ← Local 3-container dev stack
 ├── .env.example                ← Environment variable template
 │
-├── frontend/                   ← React 18 + Vite + TailwindCSS
-│   ├── Dockerfile              ← Multi-stage: node build → nginx serve
-│   ├── nginx.conf              ← SPA routing + static asset caching
-│   └── src/
-│       ├── components/         ← analysis/, dashboard/, chat/, layout/, shared/
-│       ├── pages/              ← Home, Analyze, History, SessionDetail, Settings
-│       ├── context/            ← AnalysisContext (global state)
-│       ├── api/                ← Axios client → FastAPI
-│       └── utils/              ← Currency + date formatters
+├── app/                        ← Core application services
+│   ├── frontend/               ← React 18 + Vite + TailwindCSS
+│   │   ├── Dockerfile          ← Multi-stage: node build → nginx serve
+│   │   ├── nginx.conf          ← SPA routing + static asset caching
+│   │   └── src/                ← Components, pages, context, api
+│   │
+│   ├── backend/                ← Python FastAPI
+│   │   ├── Dockerfile          ← python:3.11-slim
+│   │   ├── alembic/            ← DB migrations (3 tables)
+│   │   └── app/                ← Routers, schemas, services, models
+│   │
+│   └── database/               ← PostgreSQL init and seed scripts
 │
-├── backend/                    ← Python FastAPI
-│   ├── Dockerfile              ← python:3.11-slim, non-root user
-│   ├── requirements.txt
-│   ├── alembic/                ← DB migrations (3 tables)
-│   └── app/
-│       ├── main.py             ← FastAPI app, CORS, routers
-│       ├── config.py           ← Pydantic settings (reads .env)
-│       ├── database.py         ← Async SQLAlchemy engine
-│       ├── models/             ← ORM: session, message, recommendation
-│       ├── schemas/            ← Pydantic v2 request/response models
-│       ├── routers/            ← /analyze, /sessions routes
-│       ├── services/           ← Claude AI service + business logic
-│       └── utils/              ← Prompt builder (system + user prompts)
-│
-└── database/
-    ├── init.sql                ← pgcrypto extension setup
-    ├── seed.py                 ← 3 realistic demo sessions
-    └── db_utils.py             ← 20+ helper query functions
+├── terraform/                  ← Infrastructure as Code (VPC, ECS, RDS, ALB)
+├── k8s/                        ← Kubernetes manifests (base + overlays)
+├── helm/                       ← Helm charts for unified deployment
+├── monitoring/                 ← Observability stack (Prometheus, Grafana, Loki)
+├── docs/                       ← Architecture diagrams and guides
+└── .github/workflows/          ← GitHub Actions CI/CD pipelines
 ```
 
 ---
@@ -322,7 +317,7 @@ cloudsage-ai/
 ## 🧪 Tests
 
 ```bash
-cd backend
+cd app/backend
 pytest tests/ -v
 
 # Tests cover:
