@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+  myappfrontend:
+    build:
+      context: ./app/frontend
+    ports:
+      - "70:5173"
+    container_name: myappfrontend
+    restart: always
+    depends_on:
+      myappbackend:
+        condition: service_started
+    networks:
+      - myappnetwork
+  
+  myappbackend:
+    build:
+      context: ./app/backend
+    ports:
+      - "5000:8000"
+    container_name: myappbackend
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://myappuser:myapppassword@myappdb:5432/myappdb
+    depends_on:
+      myappdb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - myappnetwork
+
+  myappdb:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: myappuser
+      POSTGRES_PASSWORD: myapppassword
+      POSTGRES_DB: myappdb
+    ports:             
+      - "5432:5432"
+    container_name: myappdb
+    restart: always 
+    volumes:
+      - myappdbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myappuser -d myappdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - myappnetwork
+
+volumes:
+  myappdbdata:
+
+networks:
+  myappnetwork:
+    driver: bridge
