@@ -10,7 +10,6 @@ import RecommendationsTable from '../components/dashboard/RecommendationsTable';
 import ChatPanel from '../components/chat/ChatPanel';
 import { SeverityBadge } from '../components/shared/Badge';
 import { useAnalysis } from '../context/AnalysisContext';
-import { mockAnalysisResult } from '../data/mockData';
 import { formatDateTime } from '../utils/formatters';
 
 export default function SessionDetail() {
@@ -32,13 +31,13 @@ export default function SessionDetail() {
         setCurrentAnalysis(data);
         setChatMessages([]);
       } catch {
-        setSession(mockAnalysisResult);
+        setSession(null);
       } finally {
         setLoading(false);
       }
     };
     fetch();
-  }, [id]);
+  }, [id, loadSession, setCurrentAnalysis, setChatMessages]);
 
   const handleDelete = async () => {
     await deleteSession(id);
@@ -77,7 +76,7 @@ export default function SessionDetail() {
           <div className="flex items-center gap-3">
             <Link
               to="/history"
-              className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-slate-100 transition-colors"
+              className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-white/5 transition-colors"
             >
               <ArrowLeft size={16} style={{ color: 'var(--text-secondary)' }} />
             </Link>
@@ -122,18 +121,18 @@ export default function SessionDetail() {
                 <button
                   onClick={() => setConfirmDelete(false)}
                   className="px-3 py-1.5 rounded-lg text-sm font-semibold"
-                  style={{ background: '#f1f5f9', color: 'var(--text-secondary)' }}
+                  style={{ background: '#1a1c1a', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
                 >
                   Cancel
                 </button>
               </div>
             ) : (
-              <button
-                onClick={() => setConfirmDelete(true)}
-                className="btn-outline text-sm gap-1.5 text-red-400 border-red-200 hover:bg-red-50"
-                id="delete-session-btn"
-              >
-                <Trash2 size={15} />
+                <button
+                  onClick={() => setConfirmDelete(true)}
+                  className="text-sm gap-1.5 text-red-400 border border-red-400/40 rounded-lg px-3 py-2 hover:bg-red-500/10 transition-colors inline-flex items-center"
+                  id="delete-session-btn"
+                >
+                  <Trash2 size={15} />
                 Delete
               </button>
             )}
@@ -155,7 +154,7 @@ export default function SessionDetail() {
                 <div
                   key={i}
                   className="flex items-start gap-3 text-sm py-2.5 px-3 rounded-lg"
-                  style={{ background: '#fafbfc', border: '1px solid var(--border-color)' }}
+                  style={{ background: '#151715', border: '1px solid var(--border-color)' }}
                 >
                   <SeverityBadge severity={flag.severity} />
                   <div>
@@ -186,8 +185,8 @@ export default function SessionDetail() {
       {!chatOpen && (
         <button
           onClick={() => setChatOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 z-20"
-          style={{ background: 'var(--accent-primary)', boxShadow: '0 4px 20px rgba(79,110,247,0.4)' }}
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center transition-all hover:scale-105 z-20 border border-white/10"
+          style={{ background: 'var(--accent-primary)' }}
           id="floating-chat-btn"
         >
           <MessageSquare size={22} color="white" />

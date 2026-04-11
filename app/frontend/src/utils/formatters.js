@@ -66,19 +66,19 @@ export const formatNumber = (value) => {
 // ─── Priority Colors ───────────────────────────────────────────────
 export const getPriorityColor = (priority) => {
   switch (priority?.toLowerCase()) {
-    case 'high': return { bg: '#fef2f2', text: '#dc2626', border: '#fecaca' };
-    case 'medium': return { bg: '#fffbeb', text: '#d97706', border: '#fde68a' };
-    case 'low': return { bg: '#f0fdf4', text: '#16a34a', border: '#bbf7d0' };
-    default: return { bg: '#f8fafc', text: '#64748b', border: '#e2e8f0' };
+    case 'high': return { bg: 'rgba(196,88,88,0.14)', text: '#d18484', border: 'rgba(196,88,88,0.32)' };
+    case 'medium': return { bg: 'rgba(181,139,75,0.14)', text: '#c5a167', border: 'rgba(181,139,75,0.32)' };
+    case 'low': return { bg: 'rgba(74,171,111,0.14)', text: '#8fd0a8', border: 'rgba(74,171,111,0.32)' };
+    default: return { bg: 'rgba(255,255,255,0.05)', text: '#a3aaa3', border: 'rgba(255,255,255,0.12)' };
   }
 };
 
 export const getEffortColor = (effort) => {
   switch (effort?.toLowerCase()) {
-    case 'easy': return { bg: '#f0fdf4', text: '#16a34a', border: '#bbf7d0' };
-    case 'medium': return { bg: '#eff6ff', text: '#2563eb', border: '#bfdbfe' };
-    case 'hard': return { bg: '#faf5ff', text: '#7c3aed', border: '#ddd6fe' };
-    default: return { bg: '#f8fafc', text: '#64748b', border: '#e2e8f0' };
+    case 'easy': return { bg: 'rgba(74,171,111,0.14)', text: '#8fd0a8', border: 'rgba(74,171,111,0.32)' };
+    case 'medium': return { bg: 'rgba(163,170,163,0.12)', text: '#b9c0b9', border: 'rgba(163,170,163,0.3)' };
+    case 'hard': return { bg: 'rgba(126,133,126,0.18)', text: '#d1d6d1', border: 'rgba(126,133,126,0.35)' };
+    default: return { bg: 'rgba(255,255,255,0.05)', text: '#a3aaa3', border: 'rgba(255,255,255,0.12)' };
   }
 };
 

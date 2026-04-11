@@ -1,13 +1,12 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { api } from '../api/client';
-import { mockAnalysisResult, mockSessions, mockChatMessages } from '../data/mockData';
 
 const AnalysisContext = createContext(null);
 
 export const AnalysisProvider = ({ children }) => {
-  const [currentAnalysis, setCurrentAnalysis] = useState(mockAnalysisResult);
-  const [sessions, setSessions] = useState(mockSessions);
-  const [chatMessages, setChatMessages] = useState(mockChatMessages);
+  const [currentAnalysis, setCurrentAnalysis] = useState(null);
+  const [sessions, setSessions] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [analysisStep, setAnalysisStep] = useState(0);
@@ -20,48 +19,21 @@ export const AnalysisProvider = ({ children }) => {
     setAnalysisStep(1);
 
     try {
-      // Simulate step progression
-      await delay(800);
+      await delay(200);
       setAnalysisStep(2);
-      await delay(1200);
+      const response = await api.analyze(payload);
+      const result = response.data;
       setAnalysisStep(3);
-
-      let result;
-      try {
-        const response = await api.analyze(payload);
-        result = response.data;
-        setAnalysisStep(4);
-        await delay(600);
-      } catch {
-        // Backend not available — use mock data with simulated delay
-        await delay(1500);
-        setAnalysisStep(4);
-        await delay(600);
-        result = {
-          ...mockAnalysisResult,
-          id: `session_${Date.now()}`,
-          title: `Analysis — ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`,
-          created_at: new Date().toISOString(),
-        };
-      }
+      await delay(120);
+      setAnalysisStep(4);
+      await delay(120);
 
       setCurrentAnalysis(result);
       setChatMessages([]);
 
       // Prepend to sessions list
       setSessions((prev) => [
-        {
-          id: result.id,
-          title: result.title,
-          created_at: result.created_at,
-          status: 'completed',
-          total_monthly_cost: result.total_monthly_cost_usd,
-          optimized_monthly_cost: result.optimized_monthly_cost_usd,
-          total_savings: result.total_savings_usd,
-          savings_percentage: result.savings_percentage,
-          overall_health_score: result.health_scores?.overall,
-          recommendation_count: result.recommendations?.length,
-        },
+        toSessionListItem(result),
         ...prev,
       ]);
 
@@ -86,25 +58,25 @@ export const AnalysisProvider = ({ children }) => {
     };
     setChatMessages((prev) => [...prev, userMessage]);
     setIsChatLoading(true);
+    setError(null);
 
     try {
-      let assistantContent;
-      try {
-        const response = await api.sendChatMessage(currentAnalysis.id, message);
-        assistantContent = response.data.content;
-      } catch {
-        // Mock response
-        await delay(1500);
-        assistantContent = generateMockChatResponse(message, currentAnalysis);
+      const response = await api.sendChatMessage(currentAnalysis.id, message);
+      const payload = response.data;
+      const assistantContent = payload?.assistant_message?.content || payload?.content;
+      if (!assistantContent) {
+        throw new Error('Chat response was empty');
       }
 
       const assistantMessage = {
-        id: `msg_${Date.now()}_assistant`,
+        id: payload?.assistant_message?.id || `msg_${Date.now()}_assistant`,
         role: 'assistant',
         content: assistantContent,
-        created_at: new Date().toISOString(),
+        created_at: payload?.assistant_message?.created_at || new Date().toISOString(),
       };
       setChatMessages((prev) => [...prev, assistantMessage]);
+    } catch (err) {
+      setError(err.userMessage || err.message || 'Chat failed. Please try again.');
     } finally {
       setIsChatLoading(false);
     }
@@ -114,35 +86,39 @@ export const AnalysisProvider = ({ children }) => {
   const loadSessions = useCallback(async () => {
     try {
       const response = await api.getSessions();
-      setSessions(response.data.sessions || response.data);
-    } catch {
-      setSessions(mockSessions);
+      const payload = response.data.sessions || response.data || [];
+      setSessions(Array.isArray(payload) ? payload.map(toSessionListItem) : []);
+    } catch (err) {
+      setError(err.userMessage || 'Failed to load sessions.');
+      throw err;
     }
   }, []);
 
   // ─── Load specific session ────────────────────────────────────────
   const loadSession = useCallback(async (id) => {
-    const local = sessions.find((s) => s.id === id);
-    if (id === mockAnalysisResult.id || !id.startsWith('session_demo')) {
-      return mockAnalysisResult;
-    }
     try {
       const response = await api.getSession(id);
       return response.data;
-    } catch {
-      return mockAnalysisResult;
+    } catch (err) {
+      setError(err.userMessage || 'Failed to load session.');
+      throw err;
     }
-  }, [sessions]);
+  }, []);
 
   // ─── Delete session ───────────────────────────────────────────────
   const deleteSession = useCallback(async (id) => {
-    setSessions((prev) => prev.filter((s) => s.id !== id));
     try {
       await api.deleteSession(id);
-    } catch {
-      // Silently fail for demo
+      setSessions((prev) => prev.filter((s) => s.id !== id));
+    } catch (err) {
+      setError(err.userMessage || 'Failed to delete session.');
+      throw err;
     }
   }, []);
+
+  useEffect(() => {
+    loadSessions().catch(() => {});
+  }, [loadSessions]);
 
   return (
     <AnalysisContext.Provider
@@ -177,24 +153,15 @@ export const useAnalysis = () => {
 // ─── Helpers ──────────────────────────────────────────────────────
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const generateMockChatResponse = (message, analysis) => {
-  const lowerMsg = message.toLowerCase();
-  const savings = analysis.total_savings_usd?.toFixed(0);
-  const highRecs = analysis.recommendations?.filter((r) => r.priority === 'high') || [];
-
-  if (lowerMsg.includes('high priority') || lowerMsg.includes('high-priority')) {
-    return `Here are your **${highRecs.length} high-priority recommendations**:\n\n${highRecs
-      .map((r, i) => `${i + 1}. 🔴 **${r.resource_type} — ${r.resource_name}**\n   ${r.recommendation}\n   💰 Saves **$${r.estimated_savings_usd?.toFixed(0)}/mo**`)
-      .join('\n\n')}\n\nThese alone account for most of your potential savings. I'd tackle the easiest ones first to build momentum.`;
-  }
-
-  if (lowerMsg.includes('savings plan') || lowerMsg.includes('reserved')) {
-    return `**Savings Plans vs Reserved Instances:**\n\n- **Compute Savings Plans** — 35-40% discount, apply across instance families and regions. Most flexible.\n- **EC2 Instance Savings Plans** — up to 40% discount, locked to a specific instance family + region.\n- **Standard RIs** — up to 40% discount, least flexible, but can be sold on the RI Marketplace.\n\nFor your current setup, **Compute Savings Plans** are the best fit since you're planning to rightsize (change instance types). Lock in 60% of your baseline at the current family, keep 40% On-Demand for peak flexibility.`;
-  }
-
-  if (lowerMsg.includes('graviton') || lowerMsg.includes('arm')) {
-    return 'Migrating to **Graviton3 (ARM)** instances would give you:\n\n- **~20% better performance** per dollar vs. x86 equivalents\n- **~10% lower cost** for same workloads\n- Supported by: ECS Fargate, EC2 (C7g, M7g, R7g families), RDS, Lambda\n\nFor your "m5.xlarge" fleet (after rightsizing), the equivalent is **m7g.xlarge** at ~$0.161/hr vs $0.192/hr — saving approximately **$220/month** additional. Most modern containerized apps work without changes.';
-  }
-
-  return `Based on your current infrastructure analysis:\n\n- **Total monthly spend:** $${(analysis.total_monthly_cost_usd || 0).toFixed(0)}\n- **Potential savings:** $${savings}/month ($${(analysis.total_savings_usd * 12).toFixed(0)}/year)\n- **${analysis.recommendations?.length || 0} recommendations** across ${new Set(analysis.recommendations?.map((r) => r.resource_type)).size || 0} service types\n\nWhat specific aspect would you like me to dive deeper into? I can explain any recommendation, model different commitment options, or help you prioritize your optimization roadmap.`;
-};
+const toSessionListItem = (session) => ({
+  id: session.id,
+  title: session.title,
+  created_at: session.created_at,
+  status: session.status || 'completed',
+  total_monthly_cost: session.total_monthly_cost ?? session.total_monthly_cost_usd ?? 0,
+  optimized_monthly_cost: session.optimized_monthly_cost ?? session.optimized_monthly_cost_usd ?? 0,
+  total_savings: session.total_savings ?? session.total_savings_usd ?? 0,
+  savings_percentage: session.savings_percentage ?? 0,
+  overall_health_score: session.overall_health_score ?? session.health_scores?.overall ?? 0,
+  recommendation_count: session.recommendation_count ?? session.recommendations?.length ?? 0,
+});

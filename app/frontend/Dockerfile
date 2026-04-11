@@ -1,37 +1,13 @@
-# ─── Stage 1: Build the React app ────────────────────────────────────────────
-FROM node:18-alpine AS builder
+FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /app 
 
-# Install dependencies first (layer cache — only re-runs on package.json changes)
-COPY package.json package-lock.json* ./
-RUN npm ci --silent
+COPY package*.json /app/
 
-# Copy source and build
-# VITE_API_URL is injected at build time so it gets baked into the JS bundle
-ARG VITE_API_URL=http://localhost:8000
-ENV VITE_API_URL=$VITE_API_URL
+RUN npm install 
 
-COPY . .
-RUN npm run build
+COPY . /app/
 
-# ─── Stage 2: Serve with Nginx ────────────────────────────────────────────────
-FROM nginx:stable-alpine AS runner
+EXPOSE 5173
 
-# Remove default nginx config
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Copy our SPA-aware nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy built static files from builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Non-root: nginx runs as nginx user by default in nginx:alpine
-EXPOSE 80
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD wget -q --spider http://localhost/health.html || exit 1
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]

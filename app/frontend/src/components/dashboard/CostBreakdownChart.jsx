@@ -3,7 +3,7 @@ import {
 } from 'recharts';
 import { formatCurrency, formatPercent } from '../../utils/formatters';
 
-const COLORS = ['#4f6ef7', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4', '#ef4444'];
+const COLORS = ['#3a8c5c', '#4aab6f', '#7e857e', '#9aa19a', '#6f8a75', '#5e6660'];
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -11,7 +11,7 @@ const CustomTooltip = ({ active, payload }) => {
     return (
       <div
         className="card px-4 py-3"
-        style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}
+        style={{ boxShadow: 'none' }}
       >
         <div className="flex items-center gap-2 mb-1">
           <div
@@ -39,9 +39,9 @@ const CustomLegend = ({ payload }) => (
     {payload?.map((entry, i) => (
       <div key={i} className="flex items-center gap-1.5">
         <div
-          className="w-2.5 h-2.5 rounded-full"
-          style={{ background: entry.color }}
-        />
+                className="w-2.5 h-2.5 rounded-full"
+                style={{ background: entry.color }}
+              />
         <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
           {entry.value}
         </span>
@@ -104,15 +104,15 @@ export default function CostBreakdownChart({ costBreakdown }) {
                 className="w-2 h-2 rounded-full shrink-0"
                 style={{ background: item.fill }}
               />
-              <span className="text-xs font-medium" style={{ color: 'var(--text-primary)' }}>
-                {item.service}
-              </span>
+                <span className="text-xs font-medium" style={{ color: 'var(--text-primary)' }}>
+                  {item.service}
+                </span>
             </div>
             <div className="flex items-center gap-3">
-              <div
-                className="w-16 h-1.5 rounded-full overflow-hidden"
-                style={{ background: '#f1f5f9' }}
-              >
+                <div
+                  className="w-16 h-1.5 rounded-full overflow-hidden"
+                  style={{ background: '#272b27' }}
+                >
                 <div
                   className="h-full rounded-full"
                   style={{

@@ -53,9 +53,9 @@ export default function ChatPanel({ isOpen, onClose }) {
         className="fixed right-0 top-0 h-full z-40 flex flex-col animate-slide-in-right"
         style={{
           width: '400px',
-          background: 'white',
+          background: '#111211',
           borderLeft: '1px solid var(--border-color)',
-          boxShadow: '-4px 0 24px rgba(0,0,0,0.08)',
+          boxShadow: 'none',
         }}
         id="chat-panel"
       >
@@ -67,7 +67,7 @@ export default function ChatPanel({ isOpen, onClose }) {
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={{ background: 'rgba(79,110,247,0.1)' }}
+              style={{ background: 'rgba(58,140,92,0.12)' }}
             >
               <Sparkles size={18} style={{ color: 'var(--accent-primary)' }} />
             </div>
@@ -82,10 +82,10 @@ export default function ChatPanel({ isOpen, onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/5 transition-colors"
             id="chat-panel-close-btn"
           >
-            <X size={16} className="text-slate-500" />
+            <X size={16} className="text-[#7e857e]" />
           </button>
         </div>
 
@@ -95,7 +95,7 @@ export default function ChatPanel({ isOpen, onClose }) {
             <div className="flex flex-col items-center justify-center h-full text-center gap-4">
               <div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center"
-                style={{ background: 'rgba(79,110,247,0.08)' }}
+                style={{ background: 'rgba(58,140,92,0.1)' }}
               >
                 <MessageSquare size={28} style={{ color: 'var(--accent-primary)' }} />
               </div>
@@ -118,7 +118,7 @@ export default function ChatPanel({ isOpen, onClose }) {
                     }}
                     className="w-full text-left px-4 py-2.5 rounded-xl text-xs font-medium transition-all hover:shadow-sm"
                     style={{
-                      background: '#f8fafc',
+                      background: '#161816',
                       border: '1px solid var(--border-color)',
                       color: 'var(--text-primary)',
                     }}
@@ -151,7 +151,7 @@ export default function ChatPanel({ isOpen, onClose }) {
         >
           <div
             className="flex items-end gap-2 rounded-xl p-1"
-            style={{ border: '1.5px solid var(--border-color)', background: 'white' }}
+            style={{ border: '1.5px solid var(--border-color)', background: '#141614' }}
           >
             <textarea
               ref={inputRef}
@@ -177,8 +177,8 @@ export default function ChatPanel({ isOpen, onClose }) {
               disabled={!inputValue.trim() || isChatLoading}
               className="w-9 h-9 rounded-lg flex items-center justify-center m-1 transition-all"
               style={{
-                background: inputValue.trim() && !isChatLoading ? 'var(--accent-primary)' : '#f1f5f9',
-                color: inputValue.trim() && !isChatLoading ? 'white' : '#94a3b8',
+                background: inputValue.trim() && !isChatLoading ? 'var(--accent-primary)' : '#202420',
+                color: inputValue.trim() && !isChatLoading ? 'white' : '#7e857e',
               }}
               id="chat-send-btn"
             >

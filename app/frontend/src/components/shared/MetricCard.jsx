@@ -35,7 +35,7 @@ export default function MetricCard({
   delta,
   deltaLabel,
   icon: Icon,
-  iconBg = '#4f6ef7',
+  iconBg = '#3a8c5c',
   iconColor = 'white',
   className = '',
   animate = true,

@@ -20,7 +20,7 @@ function renderContent(content) {
               <code
                 key={k}
                 className="px-1 py-0.5 rounded text-xs font-mono-numbers"
-                style={{ background: '#f1f5f9', color: '#4f6ef7' }}
+                style={{ background: '#151715', color: '#8fd0a8', border: '1px solid rgba(255,255,255,0.1)' }}
               >
                 {cp.slice(1, -1)}
               </code>
@@ -55,7 +55,7 @@ export function UserMessage({ message }) {
         <div
           className="px-4 py-3 rounded-2xl rounded-tr-sm text-sm leading-relaxed"
           style={{
-            background: 'var(--accent-primary)',
+            background: '#3a8c5c',
             color: 'white',
           }}
         >
@@ -75,7 +75,7 @@ export function AssistantMessage({ message }) {
       {/* Avatar */}
       <div
         className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-1"
-        style={{ background: 'rgba(79,110,247,0.1)' }}
+        style={{ background: 'rgba(58,140,92,0.12)' }}
       >
         <Cloud size={15} style={{ color: 'var(--accent-primary)' }} />
       </div>
@@ -100,7 +100,7 @@ export function TypingIndicator() {
     <div className="flex gap-3">
       <div
         className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
-        style={{ background: 'rgba(79,110,247,0.1)' }}
+        style={{ background: 'rgba(58,140,92,0.12)' }}
       >
         <Cloud size={15} style={{ color: 'var(--accent-primary)' }} />
       </div>

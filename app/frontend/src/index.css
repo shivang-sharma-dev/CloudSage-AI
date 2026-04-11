@@ -1,31 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ─── CSS Design Tokens ────────────────────────────────────────── */
 :root {
-  --bg-primary: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-sidebar: #0f172a;
-  --bg-sidebar-hover: #1e293b;
+  --bg-primary: #111211;
+  --bg-card: #1a1c1a;
+  --bg-sidebar: #141614;
+  --bg-sidebar-hover: #1b1f1c;
 
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --text-sidebar: #e2e8f0;
+  --text-primary: #edf0ed;
+  --text-secondary: #a3aaa3;
+  --text-muted: #7e857e;
+  --text-sidebar: #d7dbd7;
 
-  --accent-primary: #4f6ef7;
-  --accent-primary-hover: #3b5bdb;
-  --accent-success: #10b981;
-  --accent-warning: #f59e0b;
-  --accent-danger: #ef4444;
+  --accent-primary: #3a8c5c;
+  --accent-primary-hover: #347e52;
+  --accent-success: #4aab6f;
+  --accent-warning: #b58b4b;
+  --accent-danger: #c45858;
 
-  --border-color: #e2e8f0;
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.10);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-card: none;
+  --shadow-card-hover: none;
 
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-display: 'IBM Plex Serif', serif;
+  --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
@@ -55,20 +57,20 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #181b18;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #2a2f2a;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #363d36;
 }
 
 /* Selection */
 ::selection {
-  background-color: #c7d2fe;
-  color: #1e1b4b;
+  background-color: rgba(58, 140, 92, 0.3);
+  color: #f3f5f3;
 }
 
 /* ─── Typography Utilities ──────────────────────────────────────── */
@@ -189,13 +191,13 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: var(--shadow-card);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  box-shadow: none;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .card-hover:hover {
-  box-shadow: var(--shadow-card-hover);
   transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 .btn-primary {
@@ -216,17 +218,16 @@ body {
 .btn-primary:hover {
   background: var(--accent-primary-hover);
   transform: scale(1.02);
-  box-shadow: 0 4px 14px rgba(79, 110, 247, 0.4);
 }
 
 .btn-outline {
   background: transparent;
-  color: var(--text-primary);
+  color: #4aab6f;
   font-family: var(--font-body);
   font-weight: 600;
   padding: 0.625rem 1.25rem;
   border-radius: 8px;
-  border: 1.5px solid var(--border-color);
+  border: 1.5px solid #3a8c5c;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -235,16 +236,16 @@ body {
 }
 
 .btn-outline:hover {
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
-  background: #f0f4ff;
+  border-color: #4aab6f;
+  color: #4aab6f;
+  background: rgba(58, 140, 92, 0.1);
   transform: scale(1.02);
 }
 
 .feature-icon {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #4f6ef7, #6b8aff);
+  background: rgba(58, 140, 92, 0.18);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -257,9 +258,9 @@ body {
 .skeleton {
   background: linear-gradient(
     90deg,
-    #f1f5f9 25%,
-    #e2e8f0 50%,
-    #f1f5f9 75%
+    #181b18 25%,
+    #242824 50%,
+    #181b18 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
@@ -273,7 +274,7 @@ body {
   gap: 0.75rem;
   padding: 0.625rem 1rem;
   border-radius: 8px;
-  color: #94a3b8;
+  color: #a2a9a2;
   font-size: 0.875rem;
   font-weight: 500;
   transition: all 0.15s ease;
@@ -282,14 +283,14 @@ body {
 }
 
 .sidebar-nav-item:hover {
-  background: #1e293b;
-  color: #e2e8f0;
+  background: #1b1f1c;
+  color: #edf0ed;
 }
 
 .sidebar-nav-item.active {
-  background: rgba(79, 110, 247, 0.15);
-  color: #818cf8;
-  border-left: 3px solid #4f6ef7;
+  background: rgba(58, 140, 92, 0.18);
+  color: #8fd0a8;
+  border-left: 3px solid #3a8c5c;
 }
 
 /* ─── Grid patterns ─────────────────────────────────────────────── */
@@ -313,19 +314,19 @@ body {
 .form-input {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1.5px solid var(--border-color);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   font-family: var(--font-body);
   font-size: 0.875rem;
   color: var(--text-primary);
-  background: white;
+  background: #151715;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   outline: none;
 }
 
 .form-input:focus {
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.1);
+  box-shadow: 0 0 0 3px rgba(58, 140, 92, 0.15);
 }
 
 .form-label {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CheckCircle, Loader2 } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 const STEPS = [
   { id: 1, label: 'Parsing configuration', sublabel: 'Reading AWS resource definitions...' },
@@ -27,17 +27,17 @@ export default function AnalysisLoader({ currentStep = 1 }) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(8px)' }}
+      style={{ background: 'rgba(12, 14, 12, 0.78)', backdropFilter: 'blur(8px)' }}
     >
       <div
         className="card p-8 w-full max-w-md animate-scale-in"
-        style={{ boxShadow: '0 25px 60px rgba(0,0,0,0.3)' }}
+        style={{ boxShadow: 'none' }}
       >
         {/* Header */}
         <div className="flex items-center gap-3 mb-7">
           <div
             className="w-11 h-11 rounded-xl flex items-center justify-center"
-            style={{ background: 'rgba(79, 110, 247, 0.12)' }}
+            style={{ background: 'rgba(58, 140, 92, 0.16)' }}
           >
             <div
               className="w-6 h-6 rounded-full border-[3px] animate-spin"
@@ -79,7 +79,7 @@ export default function AnalysisLoader({ currentStep = 1 }) {
                     ) : isActive ? (
                       <div
                         className="w-6 h-6 rounded-full border-2 flex items-center justify-center animate-spin"
-                        style={{ borderColor: 'transparent', borderTopColor: 'var(--accent-primary)', background: 'rgba(79,110,247,0.1)' }}
+                        style={{ borderColor: 'transparent', borderTopColor: 'var(--accent-primary)', background: 'rgba(58,140,92,0.12)' }}
                       />
                     ) : (
                       <div
@@ -121,7 +121,7 @@ export default function AnalysisLoader({ currentStep = 1 }) {
                       className="h-full rounded-full transition-all duration-1000 ease-out"
                       style={{
                         width: progressWidths[step.id] || '0%',
-                        background: 'linear-gradient(90deg, var(--accent-primary), #818cf8)',
+                        background: 'var(--accent-primary)',
                       }}
                     />
                   </div>

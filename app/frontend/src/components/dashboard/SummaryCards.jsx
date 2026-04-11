@@ -19,7 +19,7 @@ export default function SummaryCards({ analysis }) {
       value: total_monthly_cost_usd || 0,
       formatValue: (v) => formatCurrency(v),
       icon: DollarSign,
-      iconBg: '#f59e0b',
+      iconBg: '#4aab6f',
       deltaLabel: 'on-demand pricing',
     },
     {
@@ -28,7 +28,7 @@ export default function SummaryCards({ analysis }) {
       value: total_savings_usd || 0,
       formatValue: (v) => formatCurrency(v),
       icon: TrendingDown,
-      iconBg: '#10b981',
+      iconBg: '#4aab6f',
       deltaLabel: `$${Math.round((total_savings_usd || 0) * 12).toLocaleString()}/year`,
     },
     {
@@ -37,7 +37,7 @@ export default function SummaryCards({ analysis }) {
       value: optimized_monthly_cost_usd || 0,
       formatValue: (v) => formatCurrency(v),
       icon: Zap,
-      iconBg: '#4f6ef7',
+      iconBg: '#3a8c5c',
       deltaLabel: 'after all recommendations',
     },
     {
@@ -46,7 +46,7 @@ export default function SummaryCards({ analysis }) {
       value: savings_percentage || 0,
       formatValue: (v) => `${v.toFixed(1)}%`,
       icon: Percent,
-      iconBg: '#8b5cf6',
+      iconBg: '#7e857e',
       deltaLabel: 'cost reduction potential',
     },
   ];

@@ -1,6 +1,6 @@
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  Legend, ResponsiveContainer, Cell
+  ResponsiveContainer
 } from 'recharts';
 import { formatCurrencyShort, formatCurrency } from '../../utils/formatters';
 
@@ -8,7 +8,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     const savings = payload[0]?.value - payload[1]?.value;
     return (
-      <div className="card px-4 py-3" style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
+      <div className="card px-4 py-3" style={{ boxShadow: 'none' }}>
         <p className="text-sm font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{label}</p>
         {payload.map((p, i) => (
           <div key={i} className="flex items-center gap-2 text-xs mb-1">
@@ -24,7 +24,7 @@ const CustomTooltip = ({ active, payload, label }) => {
             className="mt-2 pt-2 border-t text-xs font-semibold"
             style={{ borderColor: 'var(--border-color)', color: 'var(--accent-success)' }}
           >
-            💰 Saves {formatCurrency(savings, 0)}/mo
+            Saves {formatCurrency(savings, 0)}/mo
           </div>
         )}
       </div>
@@ -49,11 +49,11 @@ export default function BeforeAfterChart({ beforeAfterData }) {
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded" style={{ background: '#4f6ef7' }} />
+            <div className="w-3 h-3 rounded" style={{ background: '#3a8c5c' }} />
             <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>Current</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded" style={{ background: '#10b981' }} />
+            <div className="w-3 h-3 rounded" style={{ background: '#4aab6f' }} />
             <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>Projected</span>
           </div>
         </div>
@@ -63,26 +63,26 @@ export default function BeforeAfterChart({ beforeAfterData }) {
         <BarChart data={beforeAfterData} barGap={4} barCategoryGap="25%">
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="#f1f5f9"
+            stroke="#252925"
             vertical={false}
           />
           <XAxis
             dataKey="service"
-            tick={{ fontSize: 12, fill: '#64748b', fontFamily: 'Plus Jakarta Sans' }}
+            tick={{ fontSize: 12, fill: '#8f968f', fontFamily: 'Inter' }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
             tickFormatter={formatCurrencyShort}
-            tick={{ fontSize: 11, fill: '#94a3b8', fontFamily: 'Plus Jakarta Sans' }}
+            tick={{ fontSize: 11, fill: '#7e857e', fontFamily: 'Inter' }}
             axisLine={false}
             tickLine={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,0,0,0.03)' }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
           <Bar
             dataKey="current"
             name="Current"
-            fill="#4f6ef7"
+            fill="#3a8c5c"
             radius={[6, 6, 0, 0]}
             animationBegin={0}
             animationDuration={900}
@@ -90,7 +90,7 @@ export default function BeforeAfterChart({ beforeAfterData }) {
           <Bar
             dataKey="projected"
             name="Projected"
-            fill="#10b981"
+            fill="#4aab6f"
             radius={[6, 6, 0, 0]}
             animationBegin={0}
             animationDuration={900}

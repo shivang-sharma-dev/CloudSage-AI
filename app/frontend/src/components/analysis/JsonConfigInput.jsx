@@ -89,7 +89,7 @@ export default function JsonConfigInput({ onSubmit, isLoading }) {
       {/* Toolbar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-slate-500">
+          <span className="text-xs font-medium text-[#8f968f]">
             Paste your infrastructure JSON config below
           </span>
         </div>
@@ -97,7 +97,7 @@ export default function JsonConfigInput({ onSubmit, isLoading }) {
           <button
             type="button"
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-white/10 text-[#a3aaa3] hover:bg-white/5 transition-colors"
             id="json-copy-sample-btn"
           >
             {copied ? <CheckCircle size={13} className="text-green-500" /> : <Copy size={13} />}
@@ -108,8 +108,8 @@ export default function JsonConfigInput({ onSubmit, isLoading }) {
             onClick={handleLoadSample}
             className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors"
             style={{
-              background: 'rgba(79,110,247,0.06)',
-              borderColor: 'rgba(79,110,247,0.2)',
+              background: 'rgba(58,140,92,0.08)',
+              borderColor: 'rgba(58,140,92,0.24)',
               color: 'var(--accent-primary)',
             }}
             id="json-load-sample-btn"
@@ -127,18 +127,18 @@ export default function JsonConfigInput({ onSubmit, isLoading }) {
           rows={14}
           placeholder={`Paste JSON or YAML config here...\n\nExample:\n{\n  "resources": [\n    { "type": "ec2", "instance_type": "m5.xlarge", ... }\n  ]\n}`}
           className="w-full p-4 rounded-xl border-1.5 font-mono text-xs leading-relaxed resize-none outline-none transition-all"
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '12px',
-            lineHeight: '1.7',
-            background: '#0f172a',
-            color: '#e2e8f0',
-            border: error
-              ? '1.5px solid #ef4444'
-              : isValid
-              ? '1.5px solid #10b981'
-              : '1.5px solid #1e293b',
-          }}
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '12px',
+              lineHeight: '1.7',
+              background: '#141614',
+              color: '#d7dbd7',
+              border: error
+                ? '1.5px solid #c45858'
+                : isValid
+                ? '1.5px solid #4aab6f'
+                : '1.5px solid rgba(255,255,255,0.12)',
+            }}
           id="json-config-textarea"
           spellCheck="false"
         />
@@ -148,7 +148,7 @@ export default function JsonConfigInput({ onSubmit, isLoading }) {
             {isValid ? (
               <CheckCircle size={16} className="text-green-400" />
             ) : (
-              <AlertCircle size={16} className="text-red-400" />
+              <AlertCircle size={16} className="text-[#c45858]" />
             )}
           </div>
         )}
@@ -158,7 +158,7 @@ export default function JsonConfigInput({ onSubmit, isLoading }) {
       {error && (
         <div
           className="flex items-start gap-2 p-3 rounded-lg text-sm"
-          style={{ background: '#fef2f2', color: '#dc2626' }}
+          style={{ background: 'rgba(196,88,88,0.12)', color: '#d18484', border: '1px solid rgba(196,88,88,0.24)' }}
         >
           <AlertCircle size={15} className="mt-0.5 shrink-0" />
           <span className="font-mono text-xs">{error}</span>

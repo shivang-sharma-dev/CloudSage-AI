@@ -48,9 +48,9 @@ export function CategoryBadge({ category }) {
     <span
       className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
       style={{
-        background: '#f1f5f9',
-        color: '#64748b',
-        border: '1px solid #e2e8f0',
+        background: 'rgba(255,255,255,0.05)',
+        color: '#a3aaa3',
+        border: '1px solid rgba(255,255,255,0.1)',
       }}
     >
       {labels[category] || category}
@@ -76,12 +76,12 @@ export function SeverityBadge({ severity }) {
 }
 
 export function ScoreBadge({ score }) {
-  const color = score >= 80 ? '#10b981' : score >= 60 ? '#f59e0b' : '#ef4444';
-  const bg = score >= 80 ? '#f0fdf4' : score >= 60 ? '#fffbeb' : '#fef2f2';
+  const color = score >= 80 ? '#4aab6f' : score >= 60 ? '#b58b4b' : '#c45858';
+  const bg = score >= 80 ? 'rgba(74,171,111,0.14)' : score >= 60 ? 'rgba(181,139,75,0.14)' : 'rgba(196,88,88,0.14)';
   return (
     <span
       className="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-bold font-mono-numbers"
-      style={{ background: bg, color }}
+      style={{ background: bg, color, border: '1px solid rgba(255,255,255,0.1)' }}
     >
       {score}
     </span>
