@@ -5,7 +5,7 @@ services:
     build:
       context: ./app/frontend
     ports:
-      - "70:5173"
+      - "9500:9500"
     container_name: myappfrontend
     restart: always
     depends_on:
@@ -13,7 +13,7 @@ services:
         condition: service_started
     networks:
       - myappnetwork
-  
+
   myappbackend:
     build:
       context: ./app/backend
@@ -21,42 +21,79 @@ services:
       - "5000:8000"
     container_name: myappbackend
     restart: always
-    environment:
-      - DATABASE_URL=postgresql+asyncpg://myappuser:myapppassword@myappdb:5432/myappdb
     depends_on:
       myappdb:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 20s
     networks:
       - myappnetwork
 
   myappdb:
-    image: postgres:15-alpine
+    image: postgres:15
     environment:
       POSTGRES_USER: myappuser
       POSTGRES_PASSWORD: myapppassword
       POSTGRES_DB: myappdb
-    ports:             
+    ports:
       - "5432:5432"
     container_name: myappdb
-    restart: always 
-    volumes:
-      - myappdbdata:/var/lib/postgresql/data
+    restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U myappuser -d myappdb"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 5
+    volumes:
+      - myappdbdata:/var/lib/postgresql/data
     networks:
       - myappnetwork
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: cadvisor
+    privileged: true
+    ports:
+      - "8081:8080"
+    devices:
+      - /dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    networks:
+      - myappnetwork
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - myappnetwork
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - myappnetwork
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: always
+    depends_on:
+      - prometheus
+
 volumes:
   myappdbdata:
+  prometheus_data:
+  grafana_data:
 
 networks:
   myappnetwork:
