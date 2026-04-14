@@ -7,19 +7,23 @@ on:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
 
+# Force actions to use Node.js 24 runtime (Node 20 is deprecated on runners)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-test-analyze:
-    name: Build, Test & SonarQube
+    name: Build, Test & SonarCloud
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: app/frontend   # ← point to where package.json lives
+        working-directory: app/frontend
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # required for SonarQube blame data
+          fetch-depth: 0  # Full history needed for SonarCloud blame/analysis
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -33,8 +37,10 @@ jobs:
 
       - name: Run tests with coverage
         run: npm test -- --coverage --coverageReporters=lcov
+        continue-on-error: false
 
-      - name: SonarQube Scan          # ← AFTER tests so coverage exists
+      - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    
