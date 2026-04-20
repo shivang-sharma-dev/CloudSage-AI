@@ -11,7 +11,7 @@ const SUGGESTED_QUESTIONS = [
 ];
 
 export default function ChatPanel({ isOpen, onClose }) {
-  const { chatMessages, sendChatMessage, isChatLoading, currentAnalysis } = useAnalysis();
+  const { chatMessages, sendChatMessage, isChatLoading } = useAnalysis();
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -22,6 +22,15 @@ export default function ChatPanel({ isOpen, onClose }) {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen, chatMessages]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
 
   const handleSend = async () => {
     const msg = inputValue.trim();

@@ -26,11 +26,11 @@ export default function AnalysisLoader({ currentStep = 1 }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
       style={{ background: 'rgba(12, 14, 12, 0.78)', backdropFilter: 'blur(8px)' }}
     >
       <div
-        className="card p-8 w-full max-w-md animate-scale-in"
+        className="card p-8 w-full max-w-md animate-scale-in pointer-events-auto"
         style={{ boxShadow: 'none' }}
       >
         {/* Header */}
@@ -62,7 +62,6 @@ export default function AnalysisLoader({ currentStep = 1 }) {
           {STEPS.map((step) => {
             const isCompleted = currentStep > step.id;
             const isActive = currentStep === step.id;
-            const isPending = currentStep < step.id;
 
             return (
               <div key={step.id}>
