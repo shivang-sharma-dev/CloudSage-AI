@@ -2,9 +2,9 @@ version: "3.8"
 
 services:
   myappfrontend:
-    image: shivangsharma28/cloudsage-frontened:v1
+    image: shivangsharma28/cloudsage-frontend:v2
     ports:
-      - "9500:9500"
+      - "9500:80"
     container_name: myappfrontend
     restart: always
     depends_on:
@@ -14,7 +14,7 @@ services:
       - myappnetwork
 
   myappbackend:
-    image: shivangsharma28/cloudsage-backend:v1
+    image: shivangsharma28/cloudsage-backend:v2
     ports:
       - "8000:8000"
     container_name: myappbackend
